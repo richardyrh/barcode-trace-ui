@@ -22,7 +22,7 @@ app.get('/api/files', (req, res) => {
 		const fileList = files
 			.filter(file => {
 				const stat = fs.statSync(file);
-				return !stat.isDirectory();
+				return !stat.isDirectory() && (file.endsWith(".c") || file.endsWith(".cpp"));
 			})
 			.map((file, index) => ({
 			id: index + 1,
@@ -49,13 +49,18 @@ app.get('/api/load', (req, res) => {
 
 	console.log(file)
 	const filePath = path.join(__dirname, file);
+	const asmFilePath = path.join(__dirname, file.replace(/\.[^/.]+$/, ".dump"));
 
-	fs.readFile(filePath, 'utf8', (err, data) => {
-		if (err) {
-			console.error(`Error reading file: ${file}`, err);
-			return res.status(500).json({ error: 'Unable to load file content' });
-		}
-
-		res.send(data);
+	let cSource = fs.readFileSync(filePath, 'utf8');
+	let asmSource = "";
+	try {
+		asmSource = fs.readFileSync(asmFilePath, 'utf8');
+	} catch (err) {
+		console.error(`Error reading assembly: ${file}`, err);
+		asmSource = "Cannot find dump, assembly not loaded.";
+	}
+	res.send({
+		c: cSource,
+		asm: asmSource
 	});
 });

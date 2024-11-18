@@ -4,7 +4,6 @@ import axios from 'axios'; // Make sure to install axios: `npm install axios`
 
 const files = ref([]);
 const selectedFile = ref("");
-const fileContent = ref("");
 
 // Function to fetch files from backend
 const fetchFiles = async () => {
@@ -16,24 +15,25 @@ const fetchFiles = async () => {
   }
 };
 
-const emit = defineEmits(["update-source-content"])
+const emit = defineEmits(["update-source-content", "update-asm-content"])
 
 // Load the selected file content
 const loadFileContent = async () => {
   if (!selectedFile.value) return;
-  console.log("new file loading")
 
+  let fileContent = "";
+  let asmFileContent = "";
   try {
     const response = await axios.get(`http://localhost:3000/api/load`, {
       params: { file: files.value[selectedFile.value - 1].name },
-      transformResponse: []
     });
-    fileContent.value = response.data;
+    fileContent = response.data["c"];
+    asmFileContent = response.data["asm"];
   } catch (error) {
-    console.error('Error loading file content:', error);
-    fileContent.value = 'Error loading file content.';
+    fileContent = "Error loading file: " + error;
   }
-  emit("update-source-content", fileContent.value)
+  emit("update-source-content", fileContent);
+  emit("update-asm-content", asmFileContent);
 };
 
 // Called when component is mounted
@@ -61,13 +61,8 @@ onMounted(() => {
 <style scoped>
   .file-picker-container {
     position: relative;
-    flex: 2;
     display: flex;
     flex-direction: row;
-    width: 100%;
-    height: 100%;
-    max-height: 100%;
-    overflow: hidden;
     padding: 0;
     margin: 0;
   }

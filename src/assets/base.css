@@ -34,6 +34,8 @@
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
+
+  --toolbar-gradient: linear-gradient(to bottom, #303030 0%, #1d1d1d 100%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -48,6 +50,36 @@
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
   }
+}
+
+
+@keyframes pulse {
+  from {
+    background-color: rgba(255, 69, 0, 0.3);
+  }
+  50% {
+    background-color: rgba(255, 69, 0, 0.6);
+  }
+  to {
+    background-color: rgba(255, 69, 0, 0.3);
+  }
+}
+
+@keyframes flash {
+  from {
+    background-color: rgba(255, 69, 0, 0.2);
+  }
+  50% {
+    background-color: rgba(255, 69, 0, 1);
+  }
+  to {
+    background-color: rgba(255, 69, 0, 0.2);
+  }
+}
+
+@keyframes bar-wipe {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(100%); }
 }
 
 *,

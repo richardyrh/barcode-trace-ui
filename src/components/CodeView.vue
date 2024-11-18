@@ -1,18 +1,21 @@
 <script setup>
-import { ref } from 'vue';
+import 'highlight.js/lib/common';
+import hljsVuePlugin from "@highlightjs/vue-plugin";
 
 const props = defineProps({
   code: {
     type: String,
     required: true
+  },
+  selectedLine: {
+    type: Number,
+    default: 0
   }
 })
 
-const selectedLine = ref(0)
 const emit = defineEmits(["line-select"])
 
 function selectLine(lineNum) {
-  selectedLine.value = lineNum
   emit("line-select", lineNum)
 }
 
@@ -20,12 +23,17 @@ function selectLine(lineNum) {
 
 <template>
   <div class="code-view-container">
-    <div id="source-view">
+    <div class="tab-title">Source Code</div>
+    <div class="source-view">
       <div class="code-line"
            v-for="(line, index) in (typeof(code) === 'string' ? code.split('\n') : [])"
            :key="index"
+           @mouseup="() => selectLine(index)"
            :data-selected="index === selectedLine">
-        <span @mouseup="() => selectLine(index)">{{ line }}</span>
+        <highlightjs
+            language="c"
+            :code="line.length > 0 ? line : ''"
+        />
       </div>
     </div>
   </div>
@@ -36,37 +44,55 @@ function selectLine(lineNum) {
     position: relative;
     flex: 2;
     flex-basis: 10px;
-    height: 100%;
-    overflow: scroll;
+    min-height: max-content;
+    overflow-x: scroll;
+    overflow-y: visible;
+    padding-left: 4px;
   }
 
-  #source-view {
+  .source-view {
     position: relative;
     overflow: visible;
     font-family: monospace;
-    height: 100%;
+    padding-top: 32px;
     flex: 1;
-    line-height: 16px;
+    line-height: 18px;
     min-width: max-content;
+    min-height: max-content;
     width: 100%;
   }
 
   .code-line {
     position: relative;
-    height: 16px;
+    height: 20px;
     white-space: pre;
     overflow: visible;
     tab-size: 2;
     min-width: max-content;
+    padding: 0 4px 0 12px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    cursor: text;
+    border: solid 1px transparent;
 
     span {
       display: inline-block;
       width: 100%;
     }
 
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: solid 1px rgba(255, 255, 255, 0.3);
+    }
+
+    &:not(:hover) {
+      transition: background-color 0.2s, border 0.2s;
+    }
+
     &[data-selected="true"] {
-      background-color: #e6f7ff;
+      animation: pulse 1s infinite;
       color: #000;
+      border: solid 1px orangered;
     }
   }
 </style>

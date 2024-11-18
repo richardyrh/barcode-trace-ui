@@ -1,0 +1,66 @@
+pre code.hljs {
+	display: block;
+	overflow-x: auto;
+	padding: 0;
+}
+code.hljs {
+	padding: 0;
+}
+.hljs {
+	color: #ddd;
+	/*background: #303030*/
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-section,
+.hljs-link {
+	color: white
+}
+.hljs-subst {
+	/* default */
+
+}
+.hljs-variable {
+}
+.hljs-string,
+.hljs-title,
+.hljs-name,
+.hljs-type,
+.hljs-attribute,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-built_in,
+.hljs-addition,
+.hljs-variable,
+.hljs-template-tag,
+.hljs-template-variable {
+	color: #d88
+}
+.hljs-comment,
+.hljs-quote,
+.hljs-deletion,
+.hljs-meta {
+	color: #979797
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-title,
+.hljs-section,
+.hljs-doctag,
+.hljs-type,
+.hljs-name,
+.hljs-strong {
+	font-weight: bold
+}
+.hljs-keyword,
+.hljs-type {
+	color: #faa;
+}
+.hljs-type {
+	/*font-style: italic;*/
+}
+.hljs-emphasis {
+	font-style: italic
+}
